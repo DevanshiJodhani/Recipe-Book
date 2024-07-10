@@ -20,7 +20,7 @@ const SignUp = () => {
           <input type="password" placeholder="Confirm Password: ********" />
           <input type="text" placeholder="role: i.g: user or admin" />
           
-          <button type="s0ubmit">Sign Up</button>
+          <button type="submit">Sign Up</button>
         </Form>
       </Content>
     </Container>
