@@ -119,7 +119,7 @@ const StyledSlider = styled(Slider)`
     .slick-next,
     .slick-prev {
       &::before {
-        font-size: 20px;
+        display: none;
       }
     }
   }

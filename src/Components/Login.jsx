@@ -3,23 +3,23 @@ import styled from 'styled-components';
 const Login = () => {
   return (
     <Container>
-      <h1>Login Page </h1>
+      <h1>Login </h1>
       <Content>
         <Logo>
           <a href="/">
             Recipe<span>Hub</span>
           </a>
         </Logo>
-          <p>
-            If You don't have an account? <a href="#">Sign Up</a>
-          </p>
+        <p>
+          If You don't have an account? <a href="#">Sign Up</a>
+        </p>
         <Form>
           <input type="email" placeholder="abc@example.com" />
           <input type="password" placeholder="Password: ********" />
           <div>
             <a href="#">forgot password?</a>
           </div>
-          <button type="s0ubmit">Login</button>
+          <button type="submit">Login</button>
         </Form>
       </Content>
     </Container>
@@ -37,6 +37,10 @@ const Container = styled.div`
   h1 {
     text-align: center;
     margin-bottom: 30px;
+  }
+
+  @media screen and (max-width: 550px) {
+    padding: 120px 20px;
   }
 `;
 
@@ -60,6 +64,9 @@ const Content = styled.div`
       color: #333;
       text-decoration: none;
     }
+  }
+  @media screen and (max-width: 550px) {
+    padding: 18px;
   }
 `;
 
@@ -113,8 +120,6 @@ const Form = styled.form`
     }
   }
 
-
-
   button {
     padding: 16px 30px;
     margin-top: 15px;
@@ -128,6 +133,10 @@ const Form = styled.form`
     &:hover {
       background: #0056b3;
     }
+  }
+
+  @media screen and (max-width: 550px) {
+    padding: 0;
   }
 `;
 

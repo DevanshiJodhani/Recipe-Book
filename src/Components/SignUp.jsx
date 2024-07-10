@@ -39,6 +39,10 @@ const Container = styled.div`
     text-align: center;
     margin-bottom: 30px;
   }
+
+  @media screen and (max-width: 550px){
+    padding: 120px 20px;
+  }
 `;
 
 const Content = styled.div`
@@ -52,6 +56,7 @@ const Content = styled.div`
   max-width: 500px;
   width: 100%;
 
+
   p {
     font-weight: 600;
     margin-bottom: 10px;
@@ -61,6 +66,11 @@ const Content = styled.div`
       color: #333;
       text-decoration: none;
     }
+  }
+
+  @media screen and (max-width: 550px){
+    padding: 18px;   
+
   }
 `;
 
@@ -129,6 +139,10 @@ const Form = styled.form`
     &:hover {
       background: #0056b3;
     }
+  }
+
+  @media screen and (max-width: 550px){
+    padding: 0;
   }
 `;
 export default SignUp;
