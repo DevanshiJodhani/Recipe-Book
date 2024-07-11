@@ -12,7 +12,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://myrecipehub.netlify.app',
+    origin: process.env.VITE_FRONTEND_URL,
     credentials: true,
   })
 );
