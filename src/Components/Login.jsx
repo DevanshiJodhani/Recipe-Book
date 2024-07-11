@@ -1,9 +1,49 @@
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { UserContext } from '../Context/UserContext.jsx';
+import axios from '../axios.js';
+import Alert from './Alert.jsx';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [alert, setAlert] = useState({
+    message: '',
+    isOpen: false,
+    redirectTo: null,
+  });
+
+  const { setUser } = useContext(UserContext);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/login`,
+        { email, password }
+      );
+      setUser(res.data.data.user);
+      setAlert({
+        message: 'Successfully logged in!',
+        isOpen: true,
+        redirectTo: '/',
+      });
+    } catch (error) {
+      setAlert({ message: 'Login failed. Please try again.', isOpen: true });
+      console.error(error.message);
+    }
+  };
+
   return (
     <Container>
       <h1>Login </h1>
+      {alert.isOpen && (
+        <Alert
+          message={alert.message}
+          onClose={() => setAlert({ ...alert, isOpen: false })}
+          redirectTo={alert.redirectTo}
+        />
+      )}
       <Content>
         <Logo>
           <a href="/">
@@ -11,11 +51,23 @@ const Login = () => {
           </a>
         </Logo>
         <p>
-          If You don't have an account? <a href="#">Sign Up</a>
+          If You don't have an account? <a href="/signup">Sign Up</a>
         </p>
-        <Form>
-          <input type="email" placeholder="abc@example.com" />
-          <input type="password" placeholder="Password: ********" />
+        <Form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="abc@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password: ********"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <div>
             <a href="#">forgot password?</a>
           </div>

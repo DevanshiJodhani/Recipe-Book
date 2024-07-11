@@ -1,6 +1,27 @@
+import { useContext } from 'react';
 import styled from 'styled-components';
+import { UserContext } from '../Context/UserContext';
+import { useNavigate } from 'react-router-dom';
+import axios from '../axios.js';
 
 const Header = () => {
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.get('/api/v1/users/logout');
+      setUser(null);
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getFirstName = (fullName) => {
+    return fullName ? fullName.split(' ')[0] : '';
+  };
+
   return (
     <Container>
       <Content>
@@ -17,12 +38,23 @@ const Header = () => {
           </label>
           <ul>
             <li>
-              <a href="/login">Login</a>
-              <a href="/signup">Sign Up</a>
-              <a href="/logout">Log Out</a>
-              <a href="#">Create Recipe</a>
-              <a href="#">All Recipes</a>
-              <a href="#">Devanshi Jodhani</a>
+              {!user ? (
+                <>
+                  <a href="/login">Login</a>
+                  <a href="/signup">Sign Up</a>
+                </>
+              ) : (
+                <>
+                  <a href="#" onClick={handleLogout}>
+                    Log Out
+                  </a>
+                  {user.role === 'admin' && (
+                    <a href="#">Create Recipe</a>
+                  )}
+                  <a href="#">All Recipes</a>
+                  <a href="#">{getFirstName(user.name)}</a>
+                </>
+              )}
             </li>
           </ul>
         </NavLinks>
@@ -82,11 +114,13 @@ const NavLinks = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
     li {
       list-style: none;
       display: flex;
       align-items: center;
       justify-content: center;
+
       a {
         text-decoration: none;
         padding: 5px 20px;
@@ -123,8 +157,7 @@ const NavLinks = styled.div`
         text-align: right;
 
         a {
-      color: #fff;
-
+          color: #fff;
           padding: 20px;
           font-size: 22px;
           display: block;

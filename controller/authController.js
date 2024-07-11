@@ -83,16 +83,14 @@ export const login = catchAsync(async (req, res, next) => {
 });
 
 export const logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
-
+  res.clearCookie('jwt'); // Clear the JWT cookie
+  // or localStorage.removeItem('jwt'); // Clear the JWT from localStorage
   res.status(200).json({
     status: 'success',
     message: 'Logged out successfully!',
   });
 };
+
 
 export const updateUser = catchAsync(async (req, res, next) => {
   const UpdatedUser = await User.findByIdAndUpdate(

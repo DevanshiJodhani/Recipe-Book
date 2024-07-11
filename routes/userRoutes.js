@@ -14,7 +14,7 @@ import { getAllUsers, getMe, getUser } from '../controller/userController.js';
 const router = express.Router();
 
 router.post('/signup', signup);
-router.get('/login', login);
+router.post('/login', login);
 router.get('/logout', logout);
 
 router.patch('/updateUser', protect, updateUser);
@@ -24,7 +24,7 @@ router.patch('/updatePassword', protect, updatePassword);
 
 // usercontroller routes
 router.route('/allUser').get(protect, getAllUsers);
-router.route('/getMe').get(protect, getMe, getUser);
+router.route('/getMe').get(protect, getMe);
 router.route('/:id').get(protect, getUser);
 
 export default router;

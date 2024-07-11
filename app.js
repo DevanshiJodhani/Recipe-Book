@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import AppError from './utils/appError.js';
 import { globalErrorHandler } from './controller/errorController.js';
@@ -7,6 +8,13 @@ import { globalErrorHandler } from './controller/errorController.js';
 import userRoute from './routes/userRoutes.js';
 
 const app = express();
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
 
 // MIDLEWARE TO PARSE JSON
 app.use(express.json());
