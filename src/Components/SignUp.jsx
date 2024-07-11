@@ -1,25 +1,127 @@
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
+import Alert from './Alert.jsx';
+import axios from '../axios.js';
+import { UserContext } from '../Context/UserContext.jsx';
 
 const SignUp = () => {
-  return(
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: '',
+  });
+
+  const [alert, setAlert] = useState({
+    message: '',
+    isOpen: false,
+    redirectTo: null,
+  });
+
+  const { setUser } = useContext(UserContext);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (formData.password !== formData.confirmPassword) {
+        setAlert({ message: 'Passwords do not match', isOpen: true });
+        return;
+      }
+
+      // Set default role if not provided
+      const formDataWithRole = {
+        ...formData,
+        role: formData.role || 'user',
+      };
+
+      const response = await axios.post(
+        '/api/v1/users/signup',
+        formDataWithRole
+      );
+
+      setUser(response.data.data.user);
+      setAlert({
+        message: 'Signup successful!',
+        isOpen: true,
+        redirectTo: '/',
+      });
+    } catch (error) {
+      setAlert({
+        message: `Signup failed. ${
+          error.response ? error.response.data.message : 'Please try again.'
+        }`,
+        isOpen: true,
+      });
+      console.error('Signup failed:', error);
+    }
+  };
+
+  return (
     <Container>
       <h1>Sign Up </h1>
+      {alert.isOpen && (
+        <Alert
+          message={alert.message}
+          onClose={() => setAlert({ ...alert, isOpen: false })}
+          redirectTo={alert.redirectTo}
+        />
+      )}
       <Content>
         <Logo>
           <a href="/">
             Recipe<span>Hub</span>
           </a>
         </Logo>
-          <p>
-            If You already have an account? <a href="#">Login</a>
-          </p>
-        <Form>
-          <input type="name" placeholder="John Lio"/>
-          <input type="email" placeholder="abc@example.com" />
-          <input type="password" placeholder="Password: ********" />
-          <input type="password" placeholder="Confirm Password: ********" />
-          <input type="text" placeholder="role: i.g: user or admin" />
-          
+        <p>
+          If You already have an account? <a href="#">Login</a>
+        </p>
+        <Form onSubmit={handleSubmit}>
+          <input
+            type="name"
+            placeholder="John Lio"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            placeholder="abc@example.com"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password: ********"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password: ********"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            placeholder="role: i.g: user or admin"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+          />
+
           <button type="submit">Sign Up</button>
         </Form>
       </Content>
@@ -40,7 +142,7 @@ const Container = styled.div`
     margin-bottom: 30px;
   }
 
-  @media screen and (max-width: 550px){
+  @media screen and (max-width: 550px) {
     padding: 120px 20px;
   }
 `;
@@ -56,7 +158,6 @@ const Content = styled.div`
   max-width: 500px;
   width: 100%;
 
-
   p {
     font-weight: 600;
     margin-bottom: 10px;
@@ -68,9 +169,8 @@ const Content = styled.div`
     }
   }
 
-  @media screen and (max-width: 550px){
-    padding: 18px;   
-
+  @media screen and (max-width: 550px) {
+    padding: 18px;
   }
 `;
 
@@ -124,8 +224,6 @@ const Form = styled.form`
     }
   }
 
-
-
   button {
     padding: 16px 30px;
     margin-top: 15px;
@@ -141,7 +239,7 @@ const Form = styled.form`
     }
   }
 
-  @media screen and (max-width: 550px){
+  @media screen and (max-width: 550px) {
     padding: 0;
   }
 `;

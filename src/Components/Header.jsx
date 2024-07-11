@@ -45,12 +45,10 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <a href="#" onClick={handleLogout}>
+                  <a href="" onClick={handleLogout}>
                     Log Out
                   </a>
-                  {user.role === 'admin' && (
-                    <a href="#">Create Recipe</a>
-                  )}
+                  {user.role === 'admin' && <a href="#">Create Recipe</a>}
                   <a href="#">All Recipes</a>
                   <a href="#">{getFirstName(user.name)}</a>
                 </>

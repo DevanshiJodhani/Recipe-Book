@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { UserContext } from '../Context/UserContext.jsx';
+import { UserContext } from '../Context/UserContext';
 import axios from '../axios.js';
 import Alert from './Alert.jsx';
 
@@ -23,6 +23,7 @@ const Login = () => {
         { email, password }
       );
       setUser(res.data.data.user);
+
       setAlert({
         message: 'Successfully logged in!',
         isOpen: true,
@@ -51,7 +52,7 @@ const Login = () => {
           </a>
         </Logo>
         <p>
-          If You don't have an account? <a href="/signup">Sign Up</a>
+          If You don't have an account? <a href="#">Sign Up</a>
         </p>
         <Form onSubmit={handleLogin}>
           <input

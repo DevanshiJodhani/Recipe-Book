@@ -1,5 +1,5 @@
-import axios from '../axios.js';
-import { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import axios from '../axios';
 
 export const UserContext = createContext();
 
@@ -11,8 +11,8 @@ export const UserProvider = ({ children }) => {
       try {
         const res = await axios.get('/api/v1/users/getMe');
         setUser(res.data.data.user);
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.error(err);
       }
     };
 

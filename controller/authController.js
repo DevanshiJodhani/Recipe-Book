@@ -13,19 +13,16 @@ const signToken = (id) => {
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
-
   const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
   };
-
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
 
-  // Remove Password
   user.password = undefined;
 
   res.status(statusCode).json({
@@ -37,18 +34,14 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-export const signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-    role: req.body.role,
-  });
+export const signUp = catchAsync(async (req, res, next) => {
+  const newUser = await User.create(req.body);
+  console.log(newUser);
 
-  createSendToken(newUser, 201, res);
-
-  const message = `Welcome to Recipe Hub, ${newUser.name}! Your account has been successfully created.`;
+  // Send welcome email
+  const message = `Welcome to Recipe Hub, ${newUser.name}!\n\n We're thrilled to have you join our community of food enthusiasts. At Recipe Hub, you can explore a vast collection of recipes, share your own culinary creations, and connect with other passionate cooks.\n\nIf you have any questions or feedback, feel free to reach out to us. We value your opinion and are here to assist you.
+  \n\nHappy cooking!\n\nBest regards,\nThe Recipe Hub Team
+  `;
 
   try {
     await sendEmail({
@@ -56,7 +49,8 @@ export const signup = catchAsync(async (req, res, next) => {
       subject: 'Welcome to Recipe Hub!',
       message,
     });
-  } catch (error) {
+  } catch (err) {
+    console.log('Error sending email:', err);
     return next(
       new AppError(
         'There was an error sending the email. Try again later!',
@@ -64,6 +58,8 @@ export const signup = catchAsync(async (req, res, next) => {
       )
     );
   }
+
+  createSendToken(newUser, 201, res);
 });
 
 export const login = catchAsync(async (req, res, next) => {
@@ -83,14 +79,16 @@ export const login = catchAsync(async (req, res, next) => {
 });
 
 export const logout = (req, res) => {
-  res.clearCookie('jwt'); // Clear the JWT cookie
-  // or localStorage.removeItem('jwt'); // Clear the JWT from localStorage
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
   res.status(200).json({
     status: 'success',
     message: 'Logged out successfully!',
   });
 };
-
 
 export const updateUser = catchAsync(async (req, res, next) => {
   const UpdatedUser = await User.findByIdAndUpdate(
@@ -112,7 +110,8 @@ export const updateUser = catchAsync(async (req, res, next) => {
     },
   });
 
-  const message = `Hello ${UpdatedUser.name}, \n\nYour profile details have been successfully updated.`;
+  const message = `Hello ${UpdatedUser.name},\n\nYour profile details have been successfully updated. You can continue exploring and sharing delicious recipes on Recipe Hub.\n\nBest regards,\nThe Recipe Hub Team`;
+
   try {
     await sendEmail({
       email: UpdatedUser.email,
@@ -194,7 +193,8 @@ export const resetPassword = catchAsync(async (req, res, next) => {
 
   createSendToken(user, 200, res);
 
-  const message = `Hello ${user.name},\n\nYour password has been successfully reset.`;
+  const message = `Hello ${user.name},\n\nYour password has been successfully reset. You can now log in to Recipe Hub with your new password.\n\nBest regards,\nThe Recipe Hub Team`;
+
   try {
     await sendEmail({
       email: user.email,
@@ -227,7 +227,8 @@ export const updatePassword = catchAsync(async (req, res, next) => {
   // Log user in, send JWT
   createSendToken(user, 200, res);
 
-  const message = `Hello ${user.name},\n\nYour password has been successfully updated.`;
+  const message = `Hello ${user.name},\n\nYour password has been successfully updated. You can continue exploring and sharing delicious recipes on Recipe Hub.\n\nBest regards,\nThe Recipe Hub Team`;
+
   try {
     await sendEmail({
       email: user.email,

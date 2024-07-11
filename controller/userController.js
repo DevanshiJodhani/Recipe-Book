@@ -29,17 +29,11 @@ export const getUser = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getMe = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
-
-  if (!user) {
-    return next(new AppError('User not found', 404));
-  }
-
+export const getMe = (req, res) => {
   res.status(200).json({
     status: 'success',
     data: {
-      user,
+      user: req.user,
     },
   });
-});
+};

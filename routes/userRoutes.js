@@ -4,7 +4,7 @@ import {
   login,
   logout,
   resetPassword,
-  signup,
+  signUp,
   updatePassword,
   updateUser,
 } from '../controller/authController.js';
@@ -13,7 +13,7 @@ import { getAllUsers, getMe, getUser } from '../controller/userController.js';
 
 const router = express.Router();
 
-router.post('/signup', signup);
+router.post('/signup', signUp);
 router.post('/login', login);
 router.get('/logout', logout);
 
@@ -23,8 +23,8 @@ router.patch('/resetPassword/:token', resetPassword);
 router.patch('/updatePassword', protect, updatePassword);
 
 // usercontroller routes
-router.route('/allUser').get(protect, getAllUsers);
-router.route('/getMe').get(protect, getMe);
-router.route('/:id').get(protect, getUser);
+router.get('/getMe', protect, getMe);
+router.get('/allUser', protect, getAllUsers);
+router.get('/:id', protect, getUser);
 
 export default router;
