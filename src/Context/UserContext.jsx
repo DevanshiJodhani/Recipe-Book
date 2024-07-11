@@ -10,6 +10,7 @@ export const UserProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const res = await axios.get('/api/v1/users/getMe');
+        console.log('User data:', res.data.data.user);
         setUser(res.data.data.user);
       } catch (err) {
         console.error(err);
