@@ -41,7 +41,6 @@ const Header = () => {
               {!user ? (
                 <>
                   <a href="/login">Login</a>
-                  <a href="/me">Devanshi</a>
                   <a href="/signup">Sign Up</a>
                 </>
               ) : (
