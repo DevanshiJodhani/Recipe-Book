@@ -17,12 +17,10 @@ const Home = () => {
             to explore, cook, and share your favorite recipes, and make every
             meal a memorable experience.
           </h3>
-          <button>
+          <a href='/allRecipes'>
             All Recipes
-            <a>
               <i className="bx bx-right-arrow-alt"></i>
-            </a>
-          </button>
+          </a>
         </Info>
       </Content>
       <FastFood />
@@ -71,7 +69,7 @@ const Info = styled.div`
     color: #e0e0e0;
   }
 
-  button {
+  a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,7 +84,8 @@ const Info = styled.div`
     transition: 0.5s ease;
     cursor: pointer;
     letter-spacing: 1px;
-    a {
+    text-decoration: none;
+    i {
       margin-top: 5px;
       font-size: 28px;
       margin-left: 10px;

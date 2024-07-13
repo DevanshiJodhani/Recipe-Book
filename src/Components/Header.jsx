@@ -41,6 +41,7 @@ const Header = () => {
               {!user ? (
                 <>
                   <a href="/login">Login</a>
+                  <a href="/me">Devanshi</a>
                   <a href="/signup">Sign Up</a>
                 </>
               ) : (
@@ -48,9 +49,9 @@ const Header = () => {
                   <a href="" onClick={handleLogout}>
                     Log Out
                   </a>
-                  {user.role === 'admin' && <a href="#">Create Recipe</a>}
-                  <a href="#">All Recipes</a>
-                  <a href="#">{getFirstName(user.name)}</a>
+                  <a href="/allRecipes">All Recipes</a>
+                  {/* {user.role === 'admin' && <a href="#">Create Recipe</a>} */}
+                  <a href="/me">{getFirstName(user.name)}</a>
                 </>
               )}
             </li>
